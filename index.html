@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Smart To-Do Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="ph ph-check-square"></i>
+                    <span>TaskFlow</span>
+                </div>
+                <p class="tagline">Organize your tasks, simplify your life</p>
+            </div>
+            <div class="header-right">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="ph ph-moon"></i>
+                    <i class="ph ph-sun"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Date Picker Section -->
+            <section class="date-section">
+                <div class="section-header">
+                    <h2><i class="ph ph-calendar"></i> Select Date</h2>
+                </div>
+                <div class="date-picker-wrapper">
+                    <input type="date" id="datePicker" class="date-picker">
+                    <button class="clear-date-btn" id="clearDate" title="Show all dates">
+                        <i class="ph ph-x"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Add Task Section -->
+            <section class="add-task-section">
+                <div class="section-header">
+                    <h2><i class="ph ph-plus-circle"></i> Add New Task</h2>
+                </div>
+                <form id="taskForm" class="task-form">
+                    <div class="form-row">
+                        <input type="text" id="taskInput" class="task-input" placeholder="What needs to be done?" required>
+                        <div class="task-type-toggle">
+                            <label class="type-option">
+                                <input type="radio" name="taskType" value="dated" checked>
+                                <span class="type-label">
+                                    <i class="ph ph-calendar"></i> Date-wise
+                                </span>
+                            </label>
+                            <label class="type-option">
+                                <input type="radio" name="taskType" value="general">
+                                <span class="type-label">
+                                    <i class="ph ph-star"></i> General
+                                </span>
+                            </label>
+                        </div>
+                        <button type="submit" class="add-btn">
+                            <i class="ph ph-plus"></i>
+                            <span>Add Task</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Stats Overview -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon pending-icon">
+                        <i class="ph ph-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="pendingCount">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon started-icon">
+                        <i class="ph ph-play"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="startedCount">0</span>
+                        <span class="stat-label">Started</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon almost-icon">
+                        <i class="ph ph-spinner"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="almostCount">0</span>
+                        <span class="stat-label">Almost Done</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed-icon">
+                        <i class="ph ph-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="completedCount">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search/Filter -->
+            <section class="search-section">
+                <div class="search-wrapper">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Search tasks...">
+                    <button class="clear-search" id="clearSearch" title="Clear search">
+                        <i class="ph ph-x"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Date-wise Tasks -->
+            <section class="tasks-section" id="datedTasksSection">
+                <div class="section-header">
+                    <h2><i class="ph ph-calendar-check"></i> Date-wise Tasks</h2>
+                    <span class="task-count" id="datedTaskCount">0</span>
+                </div>
+                <div class="tasks-container" id="datedTasks">
+                    <!-- Tasks will be rendered here -->
+                </div>
+                <div class="empty-state" id="datedEmptyState">
+                    <i class="ph ph-calendar-blank"></i>
+                    <p>No tasks for this date yet</p>
+                    <span>Select a date and add your first task!</span>
+                </div>
+            </section>
+
+            <!-- General Tasks -->
+            <section class="tasks-section" id="generalTasksSection">
+                <div class="section-header">
+                    <h2><i class="ph ph-star"></i> General Major Tasks</h2>
+                    <span class="task-count" id="generalTaskCount">0</span>
+                </div>
+                <div class="tasks-container" id="generalTasks">
+                    <!-- Tasks will be rendered here -->
+                </div>
+                <div class="empty-state" id="generalEmptyState">
+                    <i class="ph ph-list-checks"></i>
+                    <p>No general tasks yet</p>
+                    <span>Add important tasks that aren't date-specific!</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Made by <i class="ph ph-heart-fill"></i> Suraj Gupta</p>
+        </footer>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <form id="editForm" class="edit-form">
+                <input type="hidden" id="editTaskId">
+                <div class="form-group">
+                    <label for="editTaskInput">Task Title</label>
+                    <input type="text" id="editTaskInput" required>
+                </div>
+                <div class="form-group" id="editDateGroup">
+                    <label for="editDateInput">Date</label>
+                    <input type="date" id="editDateInput">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="status-selector" id="editStatusSelector">
+                        <label class="status-option">
+                            <input type="radio" name="editStatus" value="pending">
+                            <span class="status-btn pending">
+                                <i class="ph ph-clock"></i> Pending
+                            </span>
+                        </label>
+                        <label class="status-option">
+                            <input type="radio" name="editStatus" value="started">
+                            <span class="status-btn started">
+                                <i class="ph ph-play"></i> Started
+                            </span>
+                        </label>
+                        <label class="status-option">
+                            <input type="radio" name="editStatus" value="almost">
+                            <span class="status-btn almost">
+                                <i class="ph ph-spinner"></i> Almost Done
+                            </span>
+                        </label>
+                        <label class="status-option">
+                            <input type="radio" name="editStatus" value="completed">
+                            <span class="status-btn completed">
+                                <i class="ph ph-check-circle"></i> Completed
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal delete-modal">
+            <div class="modal-icon delete-icon">
+                <i class="ph ph-trash"></i>
+            </div>
+            <h3>Delete Task?</h3>
+            <p>This action cannot be undone. The task will be permanently removed.</p>
+            <div class="modal-actions">
+                <button class="cancel-btn" id="cancelDelete">Cancel</button>
+                <button class="delete-btn" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
