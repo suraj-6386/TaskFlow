@@ -293,7 +293,10 @@ function renderTasks() {
     
     // Get general tasks
     const generalTaskList = tasks.filter(t => t.type === 'general');
-    const filteredGeneral = getFilteredTasks(generalTaskList);
+    // Don't apply date filter to general tasks (they don't have dates)
+    const filteredGeneral = generalTaskList.filter(task => 
+        !currentSearchQuery || task.title.toLowerCase().includes(currentSearchQuery.toLowerCase())
+    );
     
     // Render dated tasks
     datedTasks.innerHTML = '';
